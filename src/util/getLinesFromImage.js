@@ -1,8 +1,8 @@
 'use strict';
 
 const Image = require('image-js').Image;
-const mean = require('ml-array-mean');
-const median = require('ml-array-median');
+const mean = require('ml-array-mean').default;
+const median = require('ml-array-median').default;
 
 var groupRoisPerLine = require('./groupRoisPerLine');
 
