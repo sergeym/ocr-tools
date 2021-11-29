@@ -1,6 +1,6 @@
 {
   "name": "ocr-tools",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Various tools for OCR",
   "main": "./src/index.js",
   "files": [
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cheminfo-js/ocr.git"
+    "url": "https://github.com/sergeym/ocr-tools.git"
   },
   "keywords": [
     "ocr",
@@ -26,10 +26,6 @@
     "recognition"
   ],
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cheminfo-js/ocr-tools/issues"
-  },
-  "homepage": "https://github.com/cheminfo-js/ocr-tools#readme",
   "optionalDependencies": {
     "font-manager": "^0.3.1"
   },
