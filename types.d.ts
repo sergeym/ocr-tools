@@ -5,7 +5,7 @@ declare namespace OcrTools {
         lines: any
         painted: Image,
         mask: Image,
-        averageSurface: float
+        averageSurface: number
     }
 
     export interface RoiOptions {
@@ -15,11 +15,11 @@ declare namespace OcrTools {
         minRatio: number,
         maxRatio: number,
         algorithm: string,
-        randomColors: boo
+        randomColors: boolean
     }
 
-    export declare function getLinesFromImage(
-        image: Image, 
+    export function getLinesFromImage(
+        image: Image,
         roiOptions: RoiOptions
     ): TextLines;
 }
