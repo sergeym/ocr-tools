@@ -39,10 +39,13 @@
     "jest": "^26.6.3"
   },
   "dependencies": {
+    "canvas": "^2.8.0",
     "mkdirp": "^0.5.1",
     "ml-array-mean": "^1.0.1",
     "ml-array-median": "^1.0.1",
     "ml-distance": "^2.1.1",
-    "ml-kmeans": "^4.0.0"
+    "ml-kmeans": "^4.0.0",
+    "radians-degrees": "^1.0.0",
+    "transformation-matrix": "^2.10.0"
   }
 }

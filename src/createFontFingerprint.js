@@ -9,12 +9,10 @@ const getLinesFromImage = require('./util/getLinesFromImage');
 
 module.exports = function createFontFingerprint(options = {}) {
   const { image } = generateSymbolImage(options.imageOptions);
-  image.save(
-    `png/${options.imageOptions.fontName}_${
-      options.roiOptions.greyThreshold
-    }.jpg`
-  );
-  const lines = getLinesFromImage(image, options);
+  const filename = `png/${options.fingerprintOptions.fontName}_${options.roiOptions.greyThreshold}.jpg`;
+  image.save(filename);
+  const { lines } = getLinesFromImage(image, options.roiOptions);
+
   setFingerprintDataOnRoi(lines, options.fingerprintOptions);
   const symbols = options.imageOptions.symbols;
 
@@ -24,13 +22,11 @@ module.exports = function createFontFingerprint(options = {}) {
     const line = lines[i];
     line.symbol = String.fromCharCode(symbols[i]);
     if (line.rois.length !== options.imageOptions.numberPerLine) {
-      console.log(
-        `Number of symbol on the line not correct for: ${line.symbol}`
-      );
+      console.log(`Number of symbol on the line not correct for: ${line.symbol}`);
       valid = false;
     }
   }
-  if (lines.lines.length !== symbols.length) {
+  if (lines.length !== symbols.length) {
     console.log('Number of lines not correct: ', lines.length, symbols.length);
     valid = false;
   }
@@ -39,7 +35,7 @@ module.exports = function createFontFingerprint(options = {}) {
     maxSimilarity: options.fingerprintOptions.maxSimilarity
   });
 
-  const results = lines.lines.map(function (line) {
+  const results = lines.map(function (line) {
     return {
       symbol: line.symbol,
       fingerprints: line.fingerprints

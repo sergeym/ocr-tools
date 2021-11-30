@@ -4,17 +4,17 @@ const bestMatch = require('./bestMatch');
 const ambiguitySolver = require('./ambiguitySolver');
 
 module.exports = function doOcrOnLines(lines, fontData, options = {}) {
-  var {
+  let {
     minSimilarity = 0.8,
     maxNotFound = Number.MIN_SAFE_INTEGER,
     ambiguity = false
   } = options;
 
   // we try to analyse each line
-  var totalSimilarity = 0;
-  var totalFound = 0;
-  var totalNotFound = 0;
-  for (var line of lines) {
+  let totalSimilarity = 0;
+  let totalFound = 0;
+  let totalNotFound = 0;
+  for (let line of lines) {
     line.text = '';
     line.similarity = 0;
     line.found = 0;

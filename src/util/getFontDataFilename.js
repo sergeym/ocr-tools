@@ -3,7 +3,7 @@
 const { join } = require('path');
 
 module.exports = function getFingerprintsName(options = {}) {
-  var {
+  let {
     width = 8,
     height = 8,
     category = '',

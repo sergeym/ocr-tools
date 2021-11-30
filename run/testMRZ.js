@@ -2,6 +2,7 @@
 
 // eslint-disable-next-line
 const runMRZ = require('../src/runMRZ');
+const getMrz = require('../src/util/getMrz');
 
 const IJS = require('image-js').default;
 
@@ -27,31 +28,25 @@ var options = {
   }
 };
 
-var fontFingerprint = loadFontFingerprint(options.fingerprintOptions);
-IJS.load('../output/image.png').then(function (image) {
+const fontFingerprint = loadFontFingerprint(options.fingerprintOptions);
+
+const imageForOcr = __dirname + '/../demo/passport1.jpg';
+
+IJS.load(imageForOcr).then(function (image) {
   console.log('Image size: ', image.width, image.height);
   console.time('full OCR process');
 
-  var result = runMRZ(image, fontFingerprint, options).ocrResult;
+  const mrzImage = getMrz(image);
+  mrzImage.save('debug.png');
+
+  const result = runMRZ(mrzImage, fontFingerprint, options);
 
   console.timeEnd('full OCR process');
 
-  for (var line of result.lines) {
-    console.log(
-      line.text,
-      line.similarity,
-      ' Found:',
-      line.found,
-      ' Not found:',
-      line.notFound
-    );
+  for (let line of result.lines) {
+    console.log(line.text, line.similarity, ' Found:', line.found, ' Not found:', line.notFound);
   }
   console.log('Total similarity', result.totalSimilarity);
   console.log('Total found', result.totalFound);
   console.log('Total not found', result.totalNotFound);
-
-  // for the first line we just show the roiOptions
-  for (var roi of result.lines[1].rois) {
-    console.log(JSON.stringify(roi));
-  }
 });

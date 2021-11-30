@@ -8,12 +8,13 @@ var getInstalledRegularFonts = require('../src/util/getInstalledRegularFonts');
 
 var fonts = getInstalledRegularFonts(); // .filter(elem => elem === 'OCRB-Regular');
 
-// fonts=fonts.filter(a=>a.toLowerCase().indexOf('ocr')>=0).slice(0,3);
-// fonts=fonts.slice(0,1);
+fonts=fonts.filter(a=>a.toLowerCase().indexOf('ocr')>=0).slice(0, 3);
+//fonts=fonts.slice(0,1);
+console.log('fonts', fonts);
 
-var greyThresholds = [0.3, 0.5, 0.7];
+const greyThresholds = [0.3, 0.5, 0.7];
 
-var options = {
+const options = {
   roiOptions: {
     minSurface: 30,
     positive: true,
@@ -21,8 +22,8 @@ var options = {
     greyThreshold: 0.5
   },
   fingerprintOptions: {
-    height: 64,
-    width: 45,
+    height: 12,
+    width: 12,
     category: symbols.label,
     maxSimilarity: 0.95 // we store all the different fontFingerprint
   },
@@ -31,26 +32,27 @@ var options = {
     fontSize: 48, // font size we use at the beginning
     allowedRotation: 5, // we may rotate the font
     numberPerLine: 11, // better to have a odd number
-    fontName: ''
+    fontName: '', // will be set inside of for cycle
   }
 };
 
-for (var font of fonts) {
+for (let font of fonts) {
   console.log('-----------------> Processing:', font);
 
   options.imageOptions.fontName = font;
+  options.fingerprintOptions.fontName = font;
 
-  var fontFingerprintPerThreshold = [];
-  for (var greyThreshold of greyThresholds) {
+  const fontFingerprintPerThreshold = [];
+  for (let greyThreshold of greyThresholds) {
     console.log('Grey threshold', greyThreshold);
     options.roiOptions.greyThreshold = greyThreshold;
-    var fontFingerprint = createFontFingerprint(options);
+    let fontFingerprint = createFontFingerprint(options);
     if (fontFingerprint.valid) {
       fontFingerprintPerThreshold.push(fontFingerprint);
     }
   }
 
-  fontFingerprint = joinFontFingerprints(fontFingerprintPerThreshold, {
+  let fontFingerprint = joinFontFingerprints(fontFingerprintPerThreshold, {
     maxSimilarity: options.fingerprintOptions.maxSimilarity
   });
   if (fontFingerprint.length > 0) {
@@ -63,16 +65,16 @@ We have an array of fontFingerprint and we flatten it
  */
 function joinFontFingerprints(allFingerprints, options = {}) {
   const { maxSimilarity } = options;
-  var symbols = {};
+  const symbols = {};
   for (var oneFingerprint of allFingerprints) {
-    var results = oneFingerprint.results;
-    for (var result of results) {
+    const results = oneFingerprint.results;
+    for (let result of results) {
       // result is composed of a symbol and the related fontFingerprint
       if (!symbols[result.symbol]) {
         symbols[result.symbol] = [];
       }
       for (const newFingerprint of result.fingerprints) {
-        var isNew = true;
+        let isNew = true;
         for (const existingFingerprint of symbols[result.symbol]) {
           if (
             tanimotoSimilarity(existingFingerprint, newFingerprint) >=
@@ -88,8 +90,8 @@ function joinFontFingerprints(allFingerprints, options = {}) {
       }
     }
   }
-  var toReturn = [];
-  for (var symbol of Object.keys(symbols)) {
+  const toReturn = [];
+  for (let symbol of Object.keys(symbols)) {
     toReturn.push({
       symbol: symbol,
       fingerprints: symbols[symbol]

@@ -11,8 +11,11 @@ module.exports = function saveFingerprint(fingerprint, options = {}) {
   const file = getFingerprintName(options);
   mkdirp.sync(file.folder);
 
+  const filename = file.folder + '/' + file.name;
+  console.log('saving to ', filename);
+
   fs.writeFileSync(
-    file.folder + file.name,
+      filename,
     JSON.stringify({
       font: options.fontName,
       fingerprint

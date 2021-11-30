@@ -8,31 +8,32 @@ const Image = require('image-js').default;
 const loadFontFingerprint = require('../src/util/loadFontData');
 const symbols = require('../src/util/symbolClasses').MRZ; // SYMBOLS MRZ NUMBERS
 
-var options = {
+const options = {
   roiOptions: {
     minSurface: 30,
     positive: true,
     negative: false,
-    greyThreshold: 0.5
+    greyThreshold: 0.5,
+    level: true
   },
   fingerprintOptions: {
     height: 12,
     width: 12,
-    minSimilarity: 0.7,
+    minSimilarity: 0.4,
+    maxNotFound: 100,
     fontName: 'ocrb',
     category: symbols.label
   },
 };
 
+const fontFingerprint = loadFontFingerprint(options.fingerprintOptions);
 
-var fontFingerprint = loadFontFingerprint(options.fingerprintOptions);
+const imageForOcr = __dirname + '/../demo/mrz-2.png';
 
+Image.load(imageForOcr).then(function (image) {
+  const result = runOCR(image, fontFingerprint, options);
 
-Image.load('demo/ocrb.png').then(function (image) {
-  var result = runOCR(image, fontFingerprint, options);
-  console.log(result);
-
-  for (var line of result.lines) {
+  for (let line of result.lines) {
     console.log(line.text, line.similarity, ' Found:', line.found, ' Not found:', line.notFound);
   }
   console.log('Total similarity', result.totalSimilarity);
